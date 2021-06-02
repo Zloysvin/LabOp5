@@ -6,7 +6,8 @@ namespace LabOP5
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Parser prs = new Parser();
+            Console.WriteLine(prs.Execute());
         }
     }
 }

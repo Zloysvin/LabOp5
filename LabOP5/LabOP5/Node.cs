@@ -6,21 +6,55 @@ using static System.Int32;
 
 namespace LabOP5
 {
-    class Node
+    public class Node
     {
         public string data;
-        List<Node> childremList = new List<Node>();
-        Dictionary<string, int> variables = new Dictionary<string, int>();
+        private string math = "^+-*/";
+        List<Node> childrenList = new List<Node>();
+        Dictionary<string, double> variables = new Dictionary<string, double>();
 
-        public string Execute(ref Dictionary<string, int> vars)
+        public Node(string data)
+        {
+            this.data = data;
+        }
+
+        public int CreateTree(string[] str, int startPos)
+        {
+            int counter = 0;
+            for (int i = startPos; i >= 0; i--)
+            {
+                counter++;
+                if (counter <= 2)
+                {
+                    if (math.Contains(str[i]))
+                    {
+                        Node n = new Node(str[i]);
+                        i = n.CreateTree(str, i - 1);
+                        childrenList.Add(n);
+                    }
+                    else
+                    {
+                        Node n = new Node(str[i]);
+                        childrenList.Add(n);
+                    }
+                }
+                else
+                {
+                    return i + 1;
+                }
+            }
+
+            return 0;
+        }
+        public string Execute(ref Dictionary<string, double> vars)
         {
             variables = vars;
-            if (childremList.Count == 0)
+            if (childrenList.Count == 0)
                 return data;
             switch (data)
             {
                 case "=":
-                    variables[childremList[1].Execute(ref variables)] = ReturnExactNumber(childremList[0].Execute(ref variables));
+                    variables[childrenList[1].Execute(ref variables)] = ReturnExactNumber(childrenList[0].Execute(ref variables));
                     return null;
                 case "+":
                     return Convert.ToString(ExactNumber(0) + ExactNumber(1));
@@ -33,11 +67,11 @@ namespace LabOP5
             }
             return "";
         }
-        private int ExactNumber(int index)
+        private double ExactNumber(int index)
         {
-            return ReturnExactNumber(childremList[index].Execute(ref variables));
+            return ReturnExactNumber(childrenList[index].Execute(ref variables));
         }
-        private int ReturnExactNumber(string str)
+        private double ReturnExactNumber(string str)
         {
             int n = 0;
             if (TryParse(str, out n))
