@@ -7,8 +7,12 @@ namespace LabOP5
 {
     public class Parser
     {
-        StreamReader sr = new StreamReader("Program.txt");
+        StreamReader sr;
 
+        public Parser(string path)
+        {
+            sr = new StreamReader(path);
+        }
         public double Execute()
         {
             double d = 0;

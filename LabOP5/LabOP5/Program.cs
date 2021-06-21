@@ -6,7 +6,9 @@ namespace LabOP5
     {
         static void Main(string[] args)
         {
-            Parser prs = new Parser();
+            Console.WriteLine("Enter file path:");
+            string path = Console.ReadLine();
+            Parser prs = new Parser(path);
             Console.WriteLine(prs.Execute());
         }
     }
